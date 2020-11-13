@@ -1,0 +1,276 @@
+/** Tag selectors **/
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+p {
+    color: #8f8f8f;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+footer{
+    margin: 2%;
+}
+
+
+/******** Website common selectors********/
+
+main .form-control{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    max-width: 400px;
+}
+
+main .form-index{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: 100px;
+}
+
+main .form-group{
+    margin-bottom: 1.2rem;
+}
+
+input:placeholder-shown{
+    font-style: italic;
+}
+
+.row{
+    margin: 0;
+}
+
+.container-fluid{
+    padding: 4% 15%;
+}
+
+.heading-big{
+    font-size: 4rem;
+}
+
+.heading-medium{
+    font-size: 2.5rem;
+    padding-bottom: 3%;
+}
+
+@media(max-width: 991px){
+    .heading-big{
+        text-align: center;
+        font-size: 2rem;
+    }
+    .heading-medium{
+        font-size: 1.75rem;
+    }
+    .heading-small{
+        font-size: 1.25rem;
+    }
+}
+
+.text-white{
+    color: white;
+}
+
+.no-padding{
+    padding: 0;
+}
+
+/******** Navbar section********/
+
+.container-fluid.menu-bar{
+    padding: 3% 15% 0;
+}
+
+.navbar{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.nav-item{
+    padding-left: 18px;
+    font-size: 1.2rem;
+}
+@media(max-width: 767px){
+    .hide-text{
+        display: none;
+    }
+}
+
+.small-button{
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+}
+
+/******** Title section********/
+
+.title-text{
+    text-align: left;
+    padding: 50px 30px 0 0;
+}
+
+.title-description{
+    padding: 30px 0;
+    line-height: 1.5;
+}
+
+.big-button{
+    padding: .75rem 2rem;
+    border-radius: 2rem;
+    background-color: #335d2d;
+    border-color: #335d2d;
+}
+
+.big-button:hover{
+    background-color: #23411e;
+}
+
+.big-button-light{
+    padding: .75rem 2rem;
+    border-radius: 2rem;
+}
+
+.arrow{
+    color: white;
+}
+
+.image-heading{
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+}
+
+@media(max-width: 991px){
+    .title-description{
+        text-align: center;
+        font-size: 1rem;
+    }
+    .big-button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/******** Features section********/
+
+.features{
+    background-color: #fbf7f0;
+}
+
+.feature{
+    padding: 0 2%;
+}
+
+.feature-icons{
+    color:#335d2d;
+    margin-bottom: 1rem;
+}
+
+.feature-icons:hover{
+    color: #23411e;
+}
+
+/******** How It Works section********/
+
+.work-card{
+    padding: 0 2% 3%;
+}
+
+.card{
+    border-radius: 2rem;
+}
+
+.card-body{
+    padding: 8%;
+}
+
+.image-medium{
+    width: 100%;
+    max-width: 100px;
+    margin: 8%;
+    height: auto;
+    text-align: center;
+    opacity: 50%;
+}
+
+/******** CTA section********/
+.cta{
+    background-color: #335d2d;
+}
+
+/******** Login Page ********/
+
+.login-page-text{
+    padding: 5%;
+}
+
+.image-login{
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+/******** Register Page ********/
+
+.register-background{
+    background-image: url(/static/register-image-square.jpg);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+@media(max-width: 991px){
+    .register-background{
+    display: none;
+    }
+}
+
+.register-form-side{
+    padding: 4% 10%;
+}
+.register-form-side .navbar-brand{
+    color:rgba(0,0,0,.9);
+    text-decoration: none;
+}
+
+.register-form-side .heading-big{
+    padding: 7% 0;
+}
+
+.form-signing{
+    border-radius: 25px;
+    padding: 0 30px;
+    height: 50px;
+}
+
+.button-form{
+    border-radius: 25px;
+    padding: 0 30px;
+    height: 50px;
+    max-width: 400px;
+    background-color: #335d2d;
+    border-color: #335d2d;
+}
+
+.button-form:hover{
+    background-color: #23411e;
+}
+
+.checkbox{
+    margin: 0.5rem 0 1.7rem;
+}
+
+.form-error{
+    color: red;
+    font-style: italic;
+    font-size: 80%;
+}
