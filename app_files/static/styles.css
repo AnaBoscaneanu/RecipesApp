@@ -41,7 +41,7 @@ main .form-group{
     margin-bottom: 1.2rem;
 }
 
-input:placeholder-shown{
+input:placeholder-shown, textarea:placeholder-shown{
     font-style: italic;
 }
 
@@ -117,7 +117,7 @@ input:placeholder-shown{
 }
 
 .title-description{
-    padding: 30px 0;
+    padding: 4.5% 0;
     line-height: 1.5;
 }
 
@@ -273,4 +273,131 @@ input:placeholder-shown{
     color: red;
     font-style: italic;
     font-size: 80%;
+}
+
+/******** MyHome Page ********/
+.add-heading{
+    background-color:#bedbbb;
+    padding: 1.5%;
+    border: 1px;
+    border-color: #8db596;
+}
+
+/******** Add Recipe Page ********/
+
+.button-left{
+    float: left;    
+}
+
+.remove-button{
+    padding: 0.15rem 0.45rem;
+}
+
+
+.input100{
+    display: block;
+    width: 100%;
+    background: #f2f2f2;
+    border-radius: 2px;
+    font-size: 16px;
+    color: #686868;
+    line-height: 1.2;
+    padding: 10px 30px;
+    margin-top: 10px;
+    border-width: 0;
+}
+
+.label-input100{
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: bold;
+    color: #17a2b8;
+
+}
+
+.wrap-input100{
+    width: 100%;
+    position: relative;
+    margin-bottom: 2%;
+    text-align: left;    
+}
+
+.wrap-right{
+    padding-left: 1.5rem;
+}
+
+.input_inline{
+    display: inline-block;
+    max-width: 300px;
+    background: #f2f2f2;
+    border-radius: 2px;
+    font-size: 16px;
+    color: #686868;
+    line-height: 1.2;
+    padding: 10px 30px;
+    margin-top: 10px;
+    border-width: 0;
+}
+
+@media(max-width:768px){
+    .wrap-input100{
+        padding-left: 0;
+    }
+    .input_inline{
+        width: 100%;
+    }
+    .button-left{
+        float: none;
+    }
+}
+
+.image-container{
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+}
+
+#recipe_image{    
+    position: absolute;
+    width: auto;
+    min-width: 100%;
+    min-height: 100%;    
+}
+
+#ingredients .input_inline, #categories .input_inline{
+    display: inline-block;
+    max-width: 80%;
+    width: 100%;
+    background: #f2f2f2;
+    border-radius: 2px;
+    font-size: 16px;
+    color: #686868;
+    line-height: 1.2;
+    padding: 10px 30px;
+    margin-top: 10px;
+    border-width: 0;
+}
+
+.w80{
+  max-width: 80%;
+}
+
+.add-directions{
+    height: 300px;
+}
+
+.add-save-button{
+    padding: 1.5% 0;
+    width: 100%;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    border-radius: 0;
+    background-color: #335d2d;
+    border-color: #335d2d;
+}
+
+.add-save-button:hover{
+    background-color: #23411e;
 }

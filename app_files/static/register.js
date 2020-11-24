@@ -1,4 +1,4 @@
-//BOOK A MEETING form validation
+// form validation
 
 function printError(elemId, hintMsg) {
     document.getElementById(elemId).innerHTML = hintMsg;
