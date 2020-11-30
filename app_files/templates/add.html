@@ -7,7 +7,7 @@ Add Recipe
 {% block main %}
     <div class="container-fluid">
         <h1 class="heading-big">ADD A RECIPE</h1>        
-        <form name="recipeForm" action="/add" method="POST" onsubmit="return validateForm()">
+        <form name="recipeForm" action="/add" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             
             <!-- Section 1-->
             <section id="AddBasics">                
@@ -16,18 +16,19 @@ Add Recipe
                     <!--Upload image-->
                     <div class="col-lg-3 add-image p-0">                    
                         <div class="mb-4 image-container">
-                          <img src="/static/image_upload.jpg" class="img-fluid" id="recipe_image" alt="upload image" name="recipeImage">
+                          <img src="/static/image_upload.jpg" class="img-fluid" id="recipe_image" alt="upload image" >
                         </div>
                         <div class="">
                             <p><label class="btn btn-info" for="file_upload" style="cursor: pointer;">Upload Image</label></p>                                                      
-                            <input class="" type="file" accept="image/gif, image/jpeg, image/png" id="file_upload" style="display: none;" onchange="loadFile(event)">                        
+                            <input class="" type="file" name="recipeImage" accept="image/gif, image/jpeg, image/png" id="file_upload" style="display: none;" onchange="loadFile(event)">  
+                            <div class="form-error" id="rImageErr"></div>                      
                         </div>                 
                     </div>
                     <!--Add other info-->
                     <div class="col-lg-9 p-0">
                         <div class="wrap-right wrap-input100">
                             <span class="label-input100">Recipe Name:</span>
-                            <input class="input100" type="text" name="recipeName" placeholder="Enter the recipe name">
+                            <input class="input100" type="text" name="recipeName" maxlength="60" placeholder="Enter the recipe name">
                             <div class="form-error" id="rNameErr"></div>
                         </div>
                         <div class="wrap-right wrap-input100">
@@ -39,14 +40,14 @@ Add Recipe
                             <div class="col-lg-6 p-0">
                                 <div class="wrap-right wrap-input100">
                                     <span class="label-input100">Prep Time:</span>
-                                    <input class="input100" type="text" name="recipePrepTime" placeholder="Enter Prep Time">
+                                    <input class="input100" type="text" name="recipePrepTime" maxlength="10" placeholder="Enter Prep Time">
                                     <div class="form-error" id="rPrepErr"></div>
                                 </div>                            
                             </div>
                             <div class="col-lg-6 p-0">
                                 <div class="wrap-right wrap-input100">
                                     <span class="label-input100">Cooking Time:</span>
-                                    <input class="input100" type="text" name="recipeCookingTime" placeholder="Enter Cooking Time">
+                                    <input class="input100" type="text" name="recipeCookingTime" maxlength="10" placeholder="Enter Cooking Time">
                                     <div class="form-error" id="rCookingErr"></div>
                                 </div>                            
                             </div>
@@ -67,11 +68,12 @@ Add Recipe
                     <div class="col-lg-6 p-0">
                         <div class="wrap-input100">
                             <span class="label-input100">Ingredients:</span>
-                            <input class="input100 w80" type="text" name="ingredient0" placeholder="Enter Ingredient">      <!--Review the name field for being posted to db-->
+                            <input class="input100 w80" type="text" name="ingredient0" id="ingredient0" placeholder="Enter Ingredient">      <!--Review the name field for being posted to db-->
                             <div class="form-error" id="rIngredientErr"></div>
                             <!--Add/remove new ingredients-->
                             <div id="ingredients">
-                            </div>           
+                            </div> 
+                            <div class="form-error" id="rIngredErr"></div>          
                         </div>
                         <span class="btn btn-info button-left mt-2" onclick="add()">Add New Ingredient</span>
                     </div>
@@ -92,52 +94,52 @@ Add Recipe
                 <!--Existing categories-->
                 <div class="row">
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat1" value="Breakfast">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat1" value="Breakfast">
                         <label for="add_cat1">Breakfast</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat2" value="Soups">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat2" value="Soups">
                         <label for="add_cat2">Soups</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat3" value="Salads">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat3" value="Salads">
                         <label for="add_cat3">Salads</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat4" value="Fish">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat4" value="Fish">
                         <label for="add_cat4">Fish</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat5" value="Meat">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat5" value="Meat">
                         <label for="add_cat5">Meat</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat6" value="Chicken">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat6" value="Chicken">
                         <label for="add_cat6">Chicken</label>
                     </div>
 
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat7" value="Vegetables">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat7" value="Vegetables">
                         <label for="add_cat7">Vegetables</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat8" value="Appetizers">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat8" value="Appetizers">
                         <label for="add_cat8">Appetizers</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat9" value="Side Dishes">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat9" value="Side Dishes">
                         <label for="add_cat9">Side Dishes</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat10" value="Pasta">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat10" value="Pasta">
                         <label for="add_cat10">Pasta</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat11" value="Sauces">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat11" value="Sauces">
                         <label for="add_cat11">Sauces</label>
                     </div>
                     <div class="col-lg-2 col-md-4 p-0 text-left">
-                        <input class="" type="checkbox" name="add_cat_ex[]" id="add_cat12" value="Desserts">
+                        <input class="" type="checkbox" name="recipeCategory" id="add_cat12" value="Desserts">
                         <label for="add_cat12">Desserts</label>
                     </div>
                 </div>
@@ -147,7 +149,8 @@ Add Recipe
                         <div class="wrap-input100">                                                        
                             <!--Add/remove new ingredients-->
                             <div id="categories">
-                            </div>           
+                            </div>
+                            <div class="form-error" id="rCategErr"></div>           
                         </div>
                         <span class="btn btn-info button-left" onclick="add_category()">Add New Category</span>
                     </div>

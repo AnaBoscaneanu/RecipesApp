@@ -1,8 +1,18 @@
 // Replace img field with the uploaded file
 
-var loadFile = function(event) {
-    var image = document.getElementById("recipe_image");
-    image.src = URL.createObjectURL(event.target.files[0]);
+function loadFile(event) {
+    printError("rImageErr", "");
+    // Check the size of the file to be under 1MB
+    const file = document.getElementById("file_upload");
+    if (file.files[0].size > 5242880) {
+      printError("rImageErr", "Your image size has to be under 5MB.");
+      file.value = "";
+    } else {
+      // Load the file on the page
+      const image = document.getElementById("recipe_image");
+      image.src = URL.createObjectURL(event.target.files[0]);
+    }
+    
 }
 
 //Add new imput field for ingredients and remove button for each
@@ -18,11 +28,10 @@ function removeElement(e) {
     
     let allElements = document.getElementById("ingredients");
     let inputs = allElements.getElementsByTagName("input");
-    for(i=0;i<inputs.length;i++){
+    for(i = 0; i < inputs.length; i++){
     	inputs[i].setAttribute('id', 'ingredients' + (i+1));
     	inputs[i].setAttribute('placeholder', "Enter Ingredient");
       inputs[i].nextSibling.setAttribute('id', 'ingredients_r' + (i+1));
-      inputs[i].setAttribute('name', 'ingredient[' + (i+1) +']')
     }
 }
   
@@ -38,7 +47,7 @@ function add() {
     input.setAttribute("class", "input_inline");
     input.setAttribute('id', 'ingredients' + ingredients_id);
     input.setAttribute('placeholder', "Enter Ingredient");
-    input.setAttribute("name", 'ingredient[' + ingredients_id +']')
+    input.setAttribute("name", 'recipeIngredients')
     let ingredients = document.getElementById("ingredients");
     
     //create remove button
@@ -63,9 +72,9 @@ function add() {
 
 function removeCategory(e) {
   let button_cat = e.target;
-  let field_cat = button.previousSibling;
-  let div_cat = button.parentElement;
-  let br = button.nextSibling;
+  let field_cat = button_cat.previousSibling;
+  let div_cat = button_cat.parentElement;
+  let br = button_cat.nextSibling;
   div_cat.removeChild(button_cat);
   div_cat.removeChild(field_cat);
   div_cat.removeChild(br);
@@ -76,7 +85,6 @@ function removeCategory(e) {
     inputsCat[i].setAttribute('id', 'categories' + (i+1));
     inputsCat[i].setAttribute('placeholder', "Enter Category");
     inputsCat[i].nextSibling.setAttribute('id', 'categories_r' + (i+1));
-    inputsCat[i].setAttribute('name', 'add_cat_new[' + (i+1) +']')
   }
 }
 
@@ -92,7 +100,7 @@ function add_category() {
   input_cat.setAttribute("class", "input_inline");
   input_cat.setAttribute('id', 'categories' + category_id);
   input_cat.setAttribute('placeholder', "Enter Category");
-  input_cat.setAttribute("name", 'add_cat_new[' + category_id +']')
+  input_cat.setAttribute("name", 'recipeCategory')
   let categories = document.getElementById("categories");
   
   //create remove button
@@ -127,13 +135,48 @@ function validateForm() {
   var recipePrepTime = document.recipeForm.recipePrepTime.value;
   var recipeCookingTime = document.recipeForm.recipeCookingTime.value;
   var recipePortions = document.recipeForm.recipePortions.value;
-  var ingredient0 = document.recipeForm.ingredient0.value
+  var ingredient0 = document.recipeForm.ingredient0.value;
   var recipeDirections = document.recipeForm.recipeDirections.value;
 
+  // Retrevieng the value of the ingredients added dynamically
+  let allIngredients = document.getElementById("ingredients");
+  let ingredientsNr = allIngredients.getElementsByTagName("input").length;
+  let ingredientList = allIngredients.getElementsByTagName("input")
 
+  let rIngredErr = false;
+  for (let i = 0; i < ingredientsNr; i++) {
+    if (ingredientList[i].value == ""){
+      rIngredErr = true;
+      printError("rIngredErr", "Please enter ingredient for each field or remove the field")      
+      break;
+    } else {
+      printError("rIngredErr", "");
+      rIngredErr = false;
+    }
 
+  }
+
+   // Retrevieng the value of the categories added dynamically
+   let allCategories = document.getElementById("categories");
+   let categoriesNr = allCategories.getElementsByTagName("input").length;
+   let categoryList = allCategories.getElementsByTagName("input")
+ 
+   let rCategErr = false;
+   for (let i = 0; i < categoriesNr; i++) {
+     if (categoryList[i].value == ""){
+       rCategErr = true;
+       printError("rCategErr", "Please enter category name for each field or remove the field")      
+       break;
+     } else {
+       printError("rCategErr", "");
+       rCategErr = false;
+     }
+ 
+   }
+
+  
   // Defining error variables with a default value
-  var rNameErr = rShortErr = rPrepErr = rCookingErr = rPortionsErr = rIngredientErr = rDirectionsErr = true;
+  let rNameErr = rShortErr = rPrepErr = rCookingErr = rPortionsErr = rIngredientErr = rDirectionsErr = true;
 
   // Validate recipe name
   if (recipeName == "") {
@@ -185,7 +228,7 @@ function validateForm() {
 
   // Validate first ingredient
   if (recipeDirections == "") {
-      printError("rDirectionsErr", "Please enter directions");
+      printError("rDirectionsErr", "Please enter ingredient");
   } else {
       printError("rDirectionsErr", "");
       rDirectionsErr = false;  
@@ -193,7 +236,7 @@ function validateForm() {
 
 
   // Prevent the form from being submitted if there are any errors
-  if ((rNameErr || rShortErr || rPrepErr || rCookingErr || rPortionsErr || rIngredientErr || rDirectionsErr) === true) {
+  if ((rNameErr || rShortErr || rPrepErr || rCookingErr || rPortionsErr || rIngredientErr || rDirectionsErr || rIngredErr || rCategErr) === true) {
     return false;
   }
 }
