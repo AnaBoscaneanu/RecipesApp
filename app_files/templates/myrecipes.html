@@ -6,25 +6,32 @@ My Homepage
 {% block navbar %}
 {% endblock %}
 
-{% block main %}
-    
-    <section id="homepage">
-        <div class="container-fluid">
-            <!-- Add recipe big button-->
-            <a class="btn btn-dark btn-lg width100-button my-4" href="{{ url_for('add') }}">+ ADD NEW RECIPE</a>
-            <div class="row mt-4">
-                <!--Left bar Categories-->
+{% block main %}    
+    <section id="">
+        <div class="container-fluid">            
+            <div class="row">
+                <!--Left bar-->
                 <div class="col-lg-2 col-md-3 p-0">                    
+                     <!-- Categories -->                    
                     <ul class="list categories">
-                        <li class="category-header mb-2"><a class="link-nostyle" href="{{ url_for('myhome') }}">CATEGORIES</a></li>                        
+                        <li class="category-header mb-2"><a class="link-nostyle" href="{{ url_for('myrecipes') }}">CATEGORIES</a></li>                        
                         {% for c in categories %}
                         <li class="category-list"><a class="link-nostyle" href="{{ url_for('categorypage', category=c[0]) }}">{{ c[0] }}</a></li>
                         {% endfor %}                        
                     </ul>
                 </div>
+
                 <!--Recently Added Recipes-->                
-                <div class="col-lg-10 col-md-9 display-border-left">                    
-                    <h5 class="heading-small font-weight-normal">Recently Added Recipes:</h5>
+                <div class="col-lg-10 col-md-9 display-border-left"> 
+                    <!--Search Bar-->
+                    <div class="div-right">
+                        <form name="searchForm" action="/myrecipes" method="POST" class="form-inline my-lg-0 search-bar">
+                            <input id="search-ingr" name="searchIngredient" class="form-control" type="search" placeholder="Search by ingredient" aria-label="Search" autocomplete="off">
+                            <button id="search-button" class="btn btn-outline-info my-2 my-sm-0" type="submit" disabled><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    <!--Display Recipes-->                   
+                    <h6 class="category-list font-weight-normal mt-5 ml-4"> You have {{ recipe_nr }} recipes:</h6>
                     <div class="row">
                         {% for r in recipes %}
                         <div class="col-lg-4 col-md-4 recipe-div pb-3">
@@ -32,7 +39,7 @@ My Homepage
                                 <div class="p-2">
                                     <div class="image-container my-3">
                                         <img class="img-fluid recipe-image" src="{{ url_for('static', filename='uploads/'+ r.recipe_id|string+'.jpg') }}" alt="recipe image">
-                                    </div>                                    
+                                    </div>  
                                     <h4 class="heading-small">{{ r.name }}</h4>
                                     <p>{{ r.description }}</p>
                                 </div>
@@ -48,4 +55,5 @@ My Homepage
 {% endblock %}
 
 {% block javascript %}
+<script src="{{ url_for('static', filename='myrecipes.js') }}"></script>
 {% endblock %}

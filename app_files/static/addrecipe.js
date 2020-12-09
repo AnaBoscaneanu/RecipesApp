@@ -9,7 +9,7 @@ function loadFile(event) {
       file.value = "";
     } else {
       // Load the file on the page
-      const image = document.getElementById("recipe_image");
+      const image = document.getElementById("image-display");
       image.src = URL.createObjectURL(event.target.files[0]);
     }
     

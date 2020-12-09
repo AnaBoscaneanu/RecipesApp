@@ -12,6 +12,7 @@ from app_files.lib.helpers import apology, login_required
 from . import app
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 
 from app_files.models import Users, Recipes, Ingredients, Categories
 
@@ -53,8 +54,83 @@ def landing_page():
 @login_required
 def myhome():
     # Query database for username
-    rows = Users.query.filter_by(id=session["user_id"]).all()    
-    return render_template("myhome.html", username=rows[0].username)
+    rows = Users.query.filter_by(id=session["user_id"]).all()       
+
+    # Query for all distinct categories of the user
+    categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
+
+    # Query for recipe information
+    recipes = Recipes.query.filter_by(user_id=session["user_id"]).order_by(Recipes.recipe_id.desc()).limit(6)
+
+    # Render template
+    return render_template("myhome.html", categories=categories, recipes=recipes)
+
+@app.route("/myrecipes", methods=["GET", "POST"])
+@login_required
+def myrecipes():
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        # Save the input from search
+        search_ingr = request.form.get("searchIngredient")
+        
+        # Redirect the user to the search results
+        return redirect("/search/" + search_ingr)
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:    
+        # Query database for username
+        rows = Users.query.filter_by(id=session["user_id"]).all()   
+
+        # Query for all distinct categories of the user
+        categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
+
+        # Query for recipe information
+        recipes = Recipes.query.filter_by(user_id=session["user_id"]).order_by(Recipes.name).all()
+
+        # Render template
+        return render_template("myrecipes.html", categories=categories, recipes=recipes, recipe_nr=len(recipes))
+
+@app.route("/myrecipes/<int:recipe_id>")
+@login_required
+def recipepage(recipe_id):
+    # Query database for username
+    rows = Users.query.filter_by(id=session["user_id"]).all()
+
+    # Query for recipe information
+    recipe = Recipes.query.filter_by(recipe_id=recipe_id).all()
+    ingredients = Ingredients.query.filter_by(recipe_id=recipe_id).all()
+    categories = Categories.query.filter_by(recipe_id=recipe_id).all()
+    
+    # Render template
+    return render_template("recipepage.html", recipe_id= recipe_id, recipe_name=recipe[0].name, description=recipe[0].description, prep_time=recipe[0].prep_time, cook_time=recipe[0].cooking_time, portions = recipe[0].portions, directions=recipe[0].directions, ingredients=ingredients, categories=categories)
+
+@app.route("/categories/<string:category>")
+@login_required
+def categorypage(category):
+    # Query database for username
+    rows = Users.query.filter_by(id=session["user_id"]).all()
+
+    # Query for all distinct categories of the user
+    categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
+
+    # Query for recipes in the chosen category
+    recipes_row = db.session.query(Recipes.recipe_id, Recipes.name, Recipes.description).filter(Recipes.user_id==session["user_id"]).join(Categories).filter(Categories.category==category).all()
+
+    # Render template
+    return render_template("categorypage.html", categories=categories, recipes=recipes_row, category=category, recipe_nr=len(recipes_row))
+
+
+@app.route("/search/<string:ingredient>")
+@login_required
+def search(ingredient):
+    # Query for all distinct categories of the user
+    categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
+
+    # Query for recipes with the chosen ingredient
+    recipes_row = db.session.query(Recipes.recipe_id, Recipes.name, Recipes.description).distinct(Recipes.recipe_id).filter(Recipes.user_id==session["user_id"]).join(Ingredients).filter(Ingredients.ingredient.ilike("%" + ingredient.lower() + "%")).all()
+
+    # Render template
+    return render_template("categorypage.html", categories=categories, recipes=recipes_row, category=ingredient, recipe_nr=len(recipes_row))
 
 @app.route("/add", methods=["GET", "POST"])
 @login_required
@@ -130,7 +206,6 @@ def add():
                 abort(400)        
             uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], str(recipe_id) + ".jpg")) # rename the file with the recipe_id and save in folder static/uploads
 
-
         # Redirect user 
         flash("Recipe Added!")
         return redirect("/add")
@@ -138,7 +213,15 @@ def add():
     # User reached route via GET (as by clicking a link or via redirect)
     else:   
         rows = Users.query.filter_by(id=session["user_id"]).all()  
-        return render_template("add.html", username=rows[0].username)
+        # Query for the categories added by the user
+        category_list = ["Breakfast", "Soups", "Salads", "Fish", "Meat", "Chicken", "Vegetables", "Appetizers", "Side Dishes", "Pasta", "Sauces", "Desserts"]
+        categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
+        new_categories = []
+        for i in categories:
+            if i[0] not in category_list:
+                new_categories.append(i[0])
+
+        return render_template("add.html", new_categories=new_categories, nr_new_categories= len(new_categories))
     
 @app.route("/login", methods=["GET", "POST"])
 def login():

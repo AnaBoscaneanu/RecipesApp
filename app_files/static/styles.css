@@ -21,38 +21,34 @@ footer{
 
 /******** Website common selectors********/
 
-main .form-control{
-    /* center form controls */
-    display: inline-block;
-
-    /* override Bootstrap's 100% width for form controls */
-    max-width: 400px;
+.background-beige{
+    background-color: #fbf7f0;
+}
+.background-lightgrey{
+    background-color: #f2f2f2;
+}
+.background-grey{
+    background-color:#d8d3cd;
+}
+.link-nostyle{
+    text-decoration: none;
+    color: #212529;
+}
+.link-nostyle:hover{
+    text-decoration: none;
+    color: #212529;
+}
+.text-white{
+    color: white;
 }
 
-main .form-index{
-    /* center form controls */
-    display: inline-block;
-
-    /* override Bootstrap's 100% width for form controls */
-    width: 100px;
-}
-
-main .form-group{
-    margin-bottom: 1.2rem;
-}
-
-input:placeholder-shown, textarea:placeholder-shown{
-    font-style: italic;
-}
-
+/** Container and headings selectors **/
 .row{
     margin: 0;
 }
-
 .container-fluid{
     padding: 4% 15%;
 }
-
 .heading-big{
     font-size: 4rem;
 }
@@ -63,6 +59,9 @@ input:placeholder-shown, textarea:placeholder-shown{
 }
 
 @media(max-width: 991px){
+    .container-fluid{
+        padding: 4% 4%;
+    }
     .heading-big{
         text-align: center;
         font-size: 2rem;
@@ -74,19 +73,80 @@ input:placeholder-shown, textarea:placeholder-shown{
         font-size: 1.25rem;
     }
 }
+@media only screen and (max-width:1025px) and (min-width:992px){
+    .heading-big{
+        font-size: 3rem;
+    }
+    .heading-medium{
+        font-size:2rem;
+    }
+    .heading-small{
+        font-size: 1.35rem;
+    }
+    .container-fluid{
+        padding: 4% 4%;
+    }
+}
 
-.text-white{
+
+/** Form selectors **/
+main .form-control{    
+    display: inline-block;
+    max-width: 400px;
+}
+
+main .form-index{
+    display: inline-block;
+    width: 100px;
+}
+
+main .form-group{
+    margin-bottom: 1.2rem;
+}
+
+input:placeholder-shown, textarea:placeholder-shown{
+    font-style: italic;
+}
+
+/** Buttons selectors **/
+.small-button{
+    border-radius: 2rem;    
+    padding: 0.5rem 1.5rem;
+}
+.big-button{
+    padding: .75rem 2rem;
+    border-radius: 2rem;
+    background-color: #335d2d;
+    border-color: #335d2d;
+}
+.big-button:hover{
+    background-color: #23411e;
+}
+@media(max-width: 991px){    
+    .big-button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.big-button-light{
+    padding: .75rem 2rem;
+    border-radius: 2rem;
+}
+.arrow{
     color: white;
 }
 
-.no-padding{
-    padding: 0;
-}
 
 /******** Navbar section********/
 
 .container-fluid.menu-bar{
     padding: 3% 15% 0;
+}
+@media(max-width: 1025px){
+    .container-fluid.menu-bar{
+        padding: 3% 4% 0;
+    }
 }
 
 .navbar{
@@ -104,41 +164,17 @@ input:placeholder-shown, textarea:placeholder-shown{
     }
 }
 
-.small-button{
-    border-radius: 2rem;
-    padding: 0.5rem 1.5rem;
-}
 
 /******** Title section********/
 
 .title-text{
     text-align: left;
-    padding: 50px 30px 0 0;
+    padding-top: 50px;
 }
 
 .title-description{
     padding: 4.5% 0;
     line-height: 1.5;
-}
-
-.big-button{
-    padding: .75rem 2rem;
-    border-radius: 2rem;
-    background-color: #335d2d;
-    border-color: #335d2d;
-}
-
-.big-button:hover{
-    background-color: #23411e;
-}
-
-.big-button-light{
-    padding: .75rem 2rem;
-    border-radius: 2rem;
-}
-
-.arrow{
-    color: white;
 }
 
 .image-heading{
@@ -152,18 +188,10 @@ input:placeholder-shown, textarea:placeholder-shown{
         text-align: center;
         font-size: 1rem;
     }
-    .big-button{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 }
 
 /******** Features section********/
 
-.features{
-    background-color: #fbf7f0;
-}
 
 .feature{
     padding: 0 2%;
@@ -219,7 +247,7 @@ input:placeholder-shown, textarea:placeholder-shown{
     margin-bottom: 30px;
 }
 
-/******** Register Page ********/
+/******** Register and Login Page ********/
 
 .register-background{
     background-image: url(/static/register-image-square.jpg);
@@ -233,25 +261,17 @@ input:placeholder-shown, textarea:placeholder-shown{
     display: none;
     }
 }
-
 .register-form-side{
     padding: 4% 10%;
 }
-.register-form-side .navbar-brand{
-    color:rgba(0,0,0,.9);
-    text-decoration: none;
-}
-
 .register-form-side .heading-big{
     padding: 7% 0;
 }
-
 .form-signing{
     border-radius: 25px;
     padding: 0 30px;
     height: 50px;
 }
-
 .button-form{
     border-radius: 25px;
     padding: 0 30px;
@@ -260,30 +280,26 @@ input:placeholder-shown, textarea:placeholder-shown{
     background-color: #335d2d;
     border-color: #335d2d;
 }
-
 .button-form:hover{
     background-color: #23411e;
 }
-
 .checkbox{
     margin: 0.5rem 0 1.7rem;
 }
-
 .form-error{
     color: red;
     font-style: italic;
     font-size: 80%;
 }
 
-/******** MyHome Page ********/
+
+/******** Add Recipe Page ********/
 .add-heading{
     background-color:#bedbbb;
     padding: 1.5%;
     border: 1px;
     border-color: #8db596;
 }
-
-/******** Add Recipe Page ********/
 
 .button-left{
     float: left;    
@@ -339,6 +355,20 @@ input:placeholder-shown, textarea:placeholder-shown{
     border-width: 0;
 }
 
+.width100-button{
+    padding: 1rem 0;
+    width: 100%;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    border-radius: 0;
+    background-color: #335d2d;
+    border-color: #335d2d;
+}
+
+.width100-button:hover{
+    background-color: #23411e;
+}
+
 @media(max-width:768px){
     .wrap-input100{
         padding-left: 0;
@@ -359,11 +389,12 @@ input:placeholder-shown, textarea:placeholder-shown{
     text-align: left;
 }
 
-#recipe_image{    
+.recipe-image{    
     position: absolute;
     width: auto;
     min-width: 100%;
-    min-height: 100%;    
+    min-height: 100%;   
+    object-fit: cover; 
 }
 
 #ingredients .input_inline, #categories .input_inline{
@@ -372,7 +403,7 @@ input:placeholder-shown, textarea:placeholder-shown{
     width: 100%;
     background: #f2f2f2;
     border-radius: 2px;
-    font-size: 16px;
+    font-size: 1rem;
     color: #686868;
     line-height: 1.2;
     padding: 10px 30px;
@@ -388,16 +419,118 @@ input:placeholder-shown, textarea:placeholder-shown{
     height: 300px;
 }
 
-.add-save-button{
-    padding: 1.5% 0;
-    width: 100%;
-    font-size: 1.75rem;
-    line-height: 1.2;
-    border-radius: 0;
-    background-color: #335d2d;
-    border-color: #335d2d;
+
+/******** MyHome Page ********/
+
+.list{
+    padding-inline-start: 0;
+}
+.recipe-div:hover{   
+    border-radius: 15px;
+    background-color: #fbf7f0;
+}
+.category-header {
+    font-weight: bold;
+    list-style-type: none;
+    text-align: left;
+    font-size: 1.25rem;
+}
+.category-list{
+    list-style-type: none;
+    text-align: left;
+    font-size: 1rem;
+    text-decoration: none;
+    color:#212529;
+    line-height: 2;
+}
+.categories .category-list:hover{
+    background-color: #fbf7f0;
 }
 
-.add-save-button:hover{
-    background-color: #23411e;
+.recipe-image-small{
+    max-width: 350px;
+    height: auto;
+    width: 100%;
+    margin-bottom: 3%;
+    padding-top: 15px;
+}
+
+.display-border-left{
+    border-left: 1px solid lightgrey;
+    padding-right: 0;
+}
+
+.div-right{
+    position: relative;
+}
+
+.search-bar{
+    width: 250px;      
+    border-radius: 2rem; 
+    background-color: #f2f2f2;  
+    position: absolute; 
+    right:0;
+}
+
+.search-bar input, .search-bar input:focus {
+    border:none;
+    padding: 0 1.5rem;
+    background:transparent;    
+    outline:none;
+    box-shadow: none;
+    height: 2.75rem;
+}
+
+.search-bar button{
+    position: absolute;
+    right: 0;
+    border-radius: 50%;
+    float: right;
+    height: 35px;
+    width: 35px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+@media(max-width:767px){
+    .categories .category-header, .categories .category-list{
+        text-align: center;
+    }
+    .display-border-left{
+        border-left:none;
+        border-top: 1px solid lightgrey;
+        padding-top: 4%;
+        padding-right: 15px;
+    }
+    .search-bar{
+        margin-right: 0;
+        position: relative;
+        width: auto;
+    }
+}
+
+/******** Recipe Page ********/
+
+.recipepage-img{
+    max-width: 500px;
+    width: 100%;
+    height: auto;    
+}
+.recipepage-section{
+    padding: 3%;
+}
+
+.bottom-to-div{
+    position: absolute;
+    bottom: 0;
+}
+@media(max-width:1025px){
+    .bottom-to-div{
+        position: relative;
+    }
+}
+
+.recipe-directions{
+    white-space: pre-wrap;
 }

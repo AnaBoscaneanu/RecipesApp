@@ -7,10 +7,10 @@
 {% block navbar %}
     <div class="container-fluid menu-bar">
         <nav class="navbar navbar-expand-md navbar-light ">
-            <a class="navbar-brand" href="/">HOME</a>
+            <a class="navbar-brand" href="{{ url_for('landing_page') }}">HOME</a>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item navbar-text hide-text">ALREADY A MEMBER?</li>
-                <li class="nav-item"><a class="btn btn-info small-button" href="/login" role="button">Sign In</a></li>
+                <li class="nav-item"><a class="btn btn-info small-button" href="{{ url_for('login') }}" role="button">Sign In</a></li>
             </ul>             
         </nav>
     </div>
@@ -21,20 +21,20 @@
     <!-- Title -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 title-text">
+            <div class="col-lg-6 title-text px-0">
                 <h1 class="heading-big">Keep all your recipes in one place</h1>
                 <h5 class="title-description">Do you like to often look for new recipes, but you forget about them later?
                     Now you can save them all in one place and look for them easily in your own online cookbook.
                 </h5>  
-                <a class="btn btn-dark btn-lg big-button" href="/register" role="button" >Get Started <i class="fas fa-arrow-right"></i></a>               
+                <a class="btn btn-dark btn-lg big-button" href="{{ url_for('register') }}" role="button" >Get Started <i class="fas fa-arrow-right"></i></a>               
             </div>
             <div class="col-lg-6">
-                <img class="image-heading" src="static/cookbook.jpg" alt="cookbooks">
+                <img class="image-heading" src="{{ url_for('static', filename='cookbook.jpg') }}" alt="cookbooks">
             </div>
         </div>
     </div>           
     <!-- Features -->
-    <div class="container-fluid features">
+    <div class="container-fluid background-beige">
         <h2 class="heading-medium">Why Choose Us?</h2>
         <div class="row">
             <div class="col-lg-4 feature">
@@ -58,49 +58,51 @@
     <div class="container-fluid">
         <h2 class="heading-medium">How It Works:</h2>
         <div class="row">
-            <div class="col-lg-3 col-md-6 work-card">
+            <div class="col-lg-4 col-md-4 work-card">
                 <div class="card">                           
                     <div class="card-body">
-                        <img class="card-img-top image-medium" src="static/add-documents.svg" alt="Card image cap">
+                        <img class="card-img-top image-medium" src="{{ url_for('static', filename='add-documents.svg') }}" alt="Card image cap">
                         <h3 class="heading-small">Add new recipes</h3>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p class="card-text">Use a template format to add your favourite recipes and save them easily.</p>
                     </div>
                 </div>                        
             </div>
-            <div class="col-lg-3 col-md-6 work-card">
+            <div class="col-lg-4 col-md-4 work-card">
                 <div class="card">                           
                     <div class="card-body">
-                        <img class="card-img-top image-medium" src="static/archive.svg" alt="Card image cap">
+                        <img class="card-img-top image-medium" src="{{ url_for('static', filename='archive.svg') }}" alt="Card image cap">
                         <h3 class="heading-small">Organize</h3>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p class="card-text">Sort your results according to categories that apply for your recipes.</p>
                     </div>
                 </div>                        
             </div>
-            <div class="col-lg-3 col-md-6 work-card">
+            <div class="col-lg-4 col-md-4 work-card">
                 <div class="card">                           
                     <div class="card-body">
-                        <img class="card-img-top image-medium" src="static/loupe.svg" alt="Card image cap">
+                        <img class="card-img-top image-medium" src="{{ url_for('static', filename='loupe.svg') }}" alt="Card image cap">
                         <h3 class="heading-small">Search</h3>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p class="card-text">You can search directly by ingredient name and get all recipes that have it.</p>
                     </div>
                 </div>                        
             </div>
+            <!-- To be added if more features are present on website
             <div class="col-lg-3 col-md-6 work-card">
                 <div class="card">                           
                     <div class="card-body">
-                        <img class="card-img-top image-medium" src="static/lightbulb.svg" alt="Card image cap">
+                        <img class="card-img-top image-medium" src="{{ url_for('static', filename='lightbulb.svg') }}" alt="Card image cap">
                         <h3 class="heading-small">Get Inspired</h3>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p class="card-text">If you are looking for something new, every day you will get a new recipe suggestion.</p>
                     </div>
                 </div>                        
             </div>
+            -->
         </div>
     </div>
     
     <!-- Call To Register -->
     <div class="container-fluid cta">
         <h3 class="heading-medium text-white">Become A Member Now And Start Organizing Your Recipes</h3>
-        <a class="btn btn-light btn-lg btn-light big-button-light" href="/register" role="button" >Get Started <i class="fas fa-arrow-right"></i></a>
+        <a class="btn btn-light btn-lg btn-light big-button-light" href="{{ url_for('register') }}" role="button" >Get Started <i class="fas fa-arrow-right"></i></a>
     </div>
     
 {% endblock %}

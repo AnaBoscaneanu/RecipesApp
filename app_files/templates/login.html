@@ -7,7 +7,7 @@
 {% block main %}
 <div class="row">        
     <div class="col-lg-6 register-form-side">
-        <a class="navbar-brand" href="/">HOME</a>            
+        <a class="navbar-brand mr-0 link-nostyle" href="/">HOME</a>            
         <h3 class="heading-big">Welcome Back!</h3>
         
         <div class="">
@@ -26,10 +26,10 @@
                 <button class="btn btn-lg btn-dark button-form form-control" type="submit">Sign In <i class="fas fa-arrow-right"></i></button>
             </form>                
         </div>
-        <p class="login-page-text">Not a member yet? <a href="/register">Create an account now >></a></p>
+        <p class="login-page-text">Not a member yet? <a href="{{ url_for('register') }}">Create an account now >></a></p>
 
     </div>
-    <div class="col-lg-6 no-padding register-background">
+    <div class="col-lg-6 p-0 register-background">
     </div>
 </div>
     
@@ -37,6 +37,6 @@
 
 {% block javascript %}
 
-<script src="/static/login.js"></script>
+<script src="{{ url_for('static', filename='login.js') }}"></script>
 
 {% endblock %}
