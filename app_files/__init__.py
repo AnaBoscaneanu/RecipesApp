@@ -9,3 +9,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///recipe_app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db.init_app(app)
+
+def getApp():
+    return app
