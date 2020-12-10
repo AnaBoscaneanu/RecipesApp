@@ -1,2 +1,3 @@
-from app_files import getApp
-app = getApp()
+from app_files import app
+if __name__ == "__main__":
+    app.run()
