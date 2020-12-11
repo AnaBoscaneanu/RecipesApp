@@ -1,4 +1,3 @@
-from app_files import app
+from app_files.webapp import getApp
 
-if __name__ == "__main__":
-    app.run()
+app = getApp()
