@@ -7,7 +7,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from app_files.lib.helpers import apology, login_required
+from app_files.lib.helpers import apology, login_required, upload_file_to_s3
 
 from . import app
 
@@ -23,9 +23,10 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Configure the max size for requests to be up to 5MB in size: 
 app.config['MAX_CONTENT_LENGTH'] = 5120 * 5120
 # Configure the list of approved file extensions:
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
-# Configure the upload path
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif', '.jpeg']
+# Configure the upload path and s3 bucket
 app.config['UPLOAD_PATH'] = 'app_files/static/uploads'
+BUCKET='recipeimages'
 
 # Ensure responses aren't cached
 @app.after_request
@@ -102,7 +103,7 @@ def recipepage(recipe_id):
     categories = Categories.query.filter_by(recipe_id=recipe_id).all()
     
     # Render template
-    return render_template("recipepage.html", recipe_id= recipe_id, recipe_name=recipe[0].name, description=recipe[0].description, prep_time=recipe[0].prep_time, cook_time=recipe[0].cooking_time, portions = recipe[0].portions, directions=recipe[0].directions, ingredients=ingredients, categories=categories)
+    return render_template("recipepage.html", recipe_id= recipe_id, recipe_name=recipe[0].name, recipe_image=recipe[0].image, description=recipe[0].description, prep_time=recipe[0].prep_time, cook_time=recipe[0].cooking_time, portions = recipe[0].portions, directions=recipe[0].directions, ingredients=ingredients, categories=categories)
 
 @app.route("/categories/<string:category>")
 @login_required
@@ -114,7 +115,7 @@ def categorypage(category):
     categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
 
     # Query for recipes in the chosen category
-    recipes_row = db.session.query(Recipes.recipe_id, Recipes.name, Recipes.description).filter(Recipes.user_id==session["user_id"]).join(Categories).filter(Categories.category==category).all()
+    recipes_row = db.session.query(Recipes.recipe_id, Recipes.name, Recipes.description, Recipes.image).filter(Recipes.user_id==session["user_id"]).join(Categories).filter(Categories.category==category).all()
 
     # Render template
     return render_template("categorypage.html", categories=categories, recipes=recipes_row, category=category, recipe_nr=len(recipes_row))
@@ -127,7 +128,7 @@ def search(ingredient):
     categories = Categories.query.with_entities(Categories.category.distinct()).filter_by(user_id=session["user_id"]).all()
 
     # Query for recipes with the chosen ingredient
-    recipes_row = db.session.query(Recipes.recipe_id, Recipes.name, Recipes.description).distinct(Recipes.recipe_id).filter(Recipes.user_id==session["user_id"]).join(Ingredients).filter(Ingredients.ingredient.ilike("%" + ingredient.lower() + "%")).all()
+    recipes_row = db.session.query(Recipes.recipe_id, Recipes.name, Recipes.image, Recipes.description).distinct(Recipes.recipe_id).filter(Recipes.user_id==session["user_id"]).join(Ingredients).filter(Ingredients.ingredient.ilike("%" + ingredient.lower() + "%")).all()
 
     # Render template
     return render_template("categorypage.html", categories=categories, recipes=recipes_row, category=ingredient, recipe_nr=len(recipes_row))
@@ -137,6 +138,8 @@ def search(ingredient):
 def add():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+
+        user_id = session["user_id"]
         
         # Ensure the user submitted a recipe name
         recipeName = request.form.get("recipeName")   # Add check that the recipe name is not already in use
@@ -174,12 +177,26 @@ def add():
             flash("You must submit directions of cooking!")
             redirect("/add")
 
-        #Store the submitted categories
+        # Store the submitted categories
         categories = request.form.getlist("recipeCategory") 
 
-        # Insert all input into database table Recipes (except image url)
-        user_id = session["user_id"]
-        record = Recipes(user_id, recipeName, "", recipeShort, recipePrepTime, recipeCookingTime, recipePortions, recipeDirections)
+        # Store the secured image on disk, upload in AWS S3 and save url in a variable
+        file = request.files["recipeImage"]
+                
+        if file.filename != '':
+            
+            file_ext = os.path.splitext(file.filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                abort(400) 
+            filename = secure_filename(file.filename)
+            newname = recipeName + str(user_id) + ".jpg" # change filename to recipe name+user id
+            file.save(os.path.join(app.config['UPLOAD_PATH'], newname)) # to rename the file  save in folder static/uploads
+            # Upload file to s3 bucket and get the file url
+            url = upload_file_to_s3(f"app_files/static/uploads/{newname}", BUCKET, newname)
+
+        # Insert all input into database table Recipes
+        
+        record = Recipes(user_id, recipeName, url, recipeShort, recipePrepTime, recipeCookingTime, recipePortions, recipeDirections)
         db.session.add(record)
         db.session.commit()
 
@@ -195,16 +212,8 @@ def add():
         for i in categories:
             record_categories = Categories(recipe_id, user_id, i)
             db.session.add(record_categories)
-            db.session.commit()
+            db.session.commit() 
         
-        # Store the secured image on disk
-        uploaded_file = request.files["recipeImage"]
-        filename = secure_filename(uploaded_file.filename)
-        if filename != '':
-            file_ext = os.path.splitext(filename)[1]
-            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                abort(400)        
-            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], str(recipe_id) + ".jpg")) # rename the file with the recipe_id and save in folder static/uploads
 
         # Redirect user 
         flash("Recipe Added!")
@@ -323,12 +332,12 @@ def register():
         
 
 
-# Define error handler !! TO BE REVIEWED !!
+# Define error handler
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
         e = InternalServerError() 
-    return apology(e.name, e.code) #change the way the error notifications are being returned to the user
+    return apology(e.name, e.code) 
 
 # Listen for errors
 for code in default_exceptions:

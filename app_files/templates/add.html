@@ -20,8 +20,11 @@ Add Recipe
                         </div>
                         <div class="">
                             <p><label class="btn btn-info" for="file_upload" style="cursor: pointer;">Upload Image</label></p>                                                      
-                            <input class="" type="file" name="recipeImage" accept="image/gif, image/jpeg, image/png" id="file_upload" style="display: none;" onchange="loadFile(event)">  
-                            <div class="form-error" id="rImageErr"></div>                      
+                            <input class="" type="file" name="recipeImage" accept="image/gif, image/jpeg, image/png, image/jpg" id="file_upload" style="display: none;" onchange="loadFile(event)">  
+                            <div class="form-error" id="rImageErr"></div> 
+                            {% if no_image == 1 %}   
+                            <div class="form-error">You need to upload a file</div> 
+                            {% endif %}                  
                         </div>                 
                     </div>
                     <!--Add other info-->

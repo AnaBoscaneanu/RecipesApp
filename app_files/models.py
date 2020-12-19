@@ -20,7 +20,7 @@ class Recipes(db.Model):
     recipe_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
     name = db.Column(db.String(60), nullable = False)
-    image = db.Column(db.Text)
+    image = db.Column(db.Text, nullable = False)
     description = db.Column(db.String(120), nullable = False)
     prep_time = db.Column(db.String(10), nullable = False)
     cooking_time = db.Column(db.String(10), nullable = False)

@@ -19,7 +19,7 @@ My Homepage
                         {% endfor %}                        
                     </ul>
                 </div>
-                <!--Recently Added Recipes-->                
+                <!-- Recipes By Category-->                
                 <div class="col-lg-10 col-md-9 display-border-left">                    
                     <h6 class="category-list font-weight-normal ml-4"> {{ recipe_nr }} result(s) for {{ category }}</h6>
                     <div class="row">
@@ -28,7 +28,7 @@ My Homepage
                             <a class="link-nostyle" href="{{ url_for('recipepage', recipe_id=r.recipe_id) }}">
                                 <div class="p-2">
                                     <div class="image-container my-3">
-                                        <img class="img-fluid recipe-image" src="{{ url_for('static', filename='uploads/'+ r.recipe_id|string+'.jpg') }}" alt="recipe image">
+                                        <img class="img-fluid recipe-image" src="{{ r.image }}" alt="recipe image">
                                     </div>  
                                     <h4 class="heading-small">{{ r.name }}</h4>
                                     <p>{{ r.description }}</p>
