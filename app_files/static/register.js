@@ -27,7 +27,7 @@ function validateForm() {
     if (psw == "") {
         printError("pswErr", "Please enter a password");
     } else {
-        if (psw.match(/[a-z]/g) && psw.match(/[A-Z]/g) && psw.match(/[0-9]/g) && psw.match(/[^a-zA-Z\d]/g) && psw.length >= 8){
+        if (psw.match(/[a-z]/g) && psw.match(/[A-Z]/g) && psw.match(/[0-9]/g) && psw.length >= 8){ //&& psw.match(/[^a-zA-Z\d]/g) for special characters
             printError("pswErr", "");
             pswErr = false;
         } else {

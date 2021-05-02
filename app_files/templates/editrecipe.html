@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Add Recipe
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <h1 class="heading-big">EDIT RECIPE</h1>        
+        <form name="recipeForm" action="{{ url_for('editrecipe', recipe_id=recipe_id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()"> <!--Action!!-->
+            
+            <!-- Section 1-->
+            <section id="AddBasics">                
+                <h3 class="add-heading heading-small text-md-left my-4">1. Name, image, short description and time.</h3>
+                <div class="row">
+                    <!--Upload image-->
+                    <div class="col-lg-3 add-image p-0">                    
+                        <div class="mb-4 image-container">
+                          <img  src="{{ recipe_image }}" class="img-fluid recipe-image" id="image-display" alt="upload image" >
+                        </div>
+                        <div class="">
+                            <p><label class="btn btn-info" for="file_upload" style="cursor: pointer;">Change Image</label></p>                                                      
+                            <input class="" type="file" name="recipeImage" accept="image/gif, image/jpeg, image/png, image/jpg" id="file_upload" style="display: none;" onchange="loadFile(event)">  
+                            <div class="form-error" id="rImageErr"></div> 
+                            {% if no_image == 1 %}   
+                            <div class="form-error">You need to upload a file</div> 
+                            {% endif %}                  
+                        </div>                 
+                    </div>
+                    <!--Add other info-->
+                    <div class="col-lg-9 p-0">
+                        <div class="wrap-right wrap-input100">
+                            <span class="label-input100">Recipe Name:</span>
+                            <input class="input100" type="text" name="recipeName" maxlength="60" value = "{{recipe_name}}">
+                            <div class="form-error" id="rNameErr"></div>
+                        </div>
+                        <div class="wrap-right wrap-input100">
+                            <span class="label-input100">Short Description:</span>
+                            <textarea class="input100" name="recipeShort" maxlength="120">{{description}}</textarea>
+                            <div class="form-error" id="rShortErr"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 p-0">
+                                <div class="wrap-right wrap-input100">
+                                    <span class="label-input100">Prep Time:</span>
+                                    <input class="input100" type="text" name="recipePrepTime" maxlength="10" value="{{ prep_time }}">
+                                    <div class="form-error" id="rPrepErr"></div>
+                                </div>                            
+                            </div>
+                            <div class="col-lg-6 p-0">
+                                <div class="wrap-right wrap-input100">
+                                    <span class="label-input100">Cooking Time:</span>
+                                    <input class="input100" type="text" name="recipeCookingTime" maxlength="10" value="{{ cook_time }}">
+                                    <div class="form-error" id="rCookingErr"></div>
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>            
+
+            <!-- Section 2 -->
+            <section id="addIngredients">
+                <h3 class="add-heading heading-small text-md-left my-4">2. Ingredients.</h3>
+                <div class="wrap-input100">
+                    <span class="label-input100">Portions:</span>
+                    <input class="input_inline" type="number" name="recipePortions" value="{{portions}}">
+                    <div class="form-error" id="rPortionsErr"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 p-0">
+                        <div class="wrap-input100">
+                            <span class="label-input100">Ingredients:</span>
+                            <!-- List with all ingredients and Add new ones-->
+                            <div id="ingredients">
+                            {% for i in ingredients %}
+                            <input class="input_inline" type="text" name="recipeIngredients" value="{{i.ingredient}}">
+                            <button class="btn btn-danger ml-2 remove-button" type="button" onclick=" removeElement(this)">x</button>                            
+                            {% endfor %}  
+                            </div> 
+                            <div class="form-error" id="rIngredErr"></div>          
+                        </div>
+                        <span class="btn btn-info button-left mt-2" onclick="add()">Add New Ingredient</span>
+                    </div>
+                </div>
+            </section>            
+
+            <!-- Section 3 -->
+            <section id="addDirections">
+                <h3 class="add-heading heading-small text-md-left my-4">3. Directions.</h3>
+                <textarea class="input100 add-directions" name="recipeDirections" maxlength="4000" >{{directions}}</textarea>
+                <div class="form-error" id="rDirectionsErr"></div>
+            </section>
+
+             <!-- Section 4 -->
+             <section id="addCategories">                
+                <h3 class="add-heading heading-small text-md-left my-4">4. Categories.</h3>
+                <p class="text-left label-input100">You can choose one or more of the existing categories or add your own categories.</p>
+                <!--Existing categories-->
+                <div class="row"> 
+                    {% for c in category_list %}                   
+                    <div class="col-lg-2 col-md-4 p-0 text-left">
+                        {% if c in recipe_categories %}
+                        <input class="" type="checkbox" checked name="recipeCategory" id="{{ c.replace(' ', '_') }}" value="{{c}}">
+                        {% else %}
+                        <input class="" type="checkbox" name="recipeCategory" id="{{ c.replace(' ', '_') }}" value="{{c}}">
+                        {% endif %}
+                        <label for="{{ c.replace(' ', '_') }}">{{c}}</label>
+                    </div>
+                    {% endfor %}           
+
+                </div>
+                <!--Add new categories-->
+                <div class="row">
+                    <div class="col-lg-6 p-0">
+                        <div class="wrap-input100">                                                        
+                            <!--Add/remove new ingredients-->
+                            <div id="categories">
+                            </div>
+                            <div class="form-error" id="rCategErr"></div>           
+                        </div>
+                        <span class="btn btn-info button-left" onclick="add_category()">Add New Category</span>
+                    </div>
+                </div>
+            </section>
+            
+            </section>
+            <!--Submit Recipe-->
+            <section id="submit-recipe">
+                <div class="text-left mt-4">
+                    <input class="checkbox" type="checkbox" id="check" required>
+                    <label for="check" class="label-input100">I confirm that all information is added.</label></a></label>
+                  </div>
+                <button class="btn btn-dark btn-lg width100-button my-4" type="submit">UPDATE RECIPE</button>
+            </section>     
+
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename='editrecipe.js') }}"></script>
+{% endblock %}
