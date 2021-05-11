@@ -1,4 +1,5 @@
 import os
+import sys
 
 import datetime
 
@@ -96,19 +97,40 @@ def myrecipes():
         # Render template
         return render_template("myrecipes.html", current_year=current_year, categories=categories, recipes=recipes, recipe_nr=len(recipes))
 
-@app.route("/myrecipes/<int:recipe_id>")
+@app.route("/myrecipes/<int:recipe_id>", methods=["GET", "POST"])
 @login_required
 def recipepage(recipe_id):
-    # Query database for username
-    rows = Users.query.filter_by(id=session["user_id"]).all()
+    # User reached route via POST for deleting a recipe
+    if request.method == "POST":
+        # Delete ingredients for the recipe
+        ingredients = Ingredients.query.filter_by(recipe_id=recipe_id).all()
+        for ingredient in ingredients:
+            record = db.session.query(Ingredients).filter_by(recipe_id=recipe_id, ingredient=ingredient.ingredient).first()
+            db.session.delete(record)
+            db.session.commit()
+        # Delete categories for the recipe
+        categories = Categories.query.filter_by(recipe_id=recipe_id).all()
+        for category in categories:
+            record = db.session.query(Categories).filter_by(recipe_id=recipe_id, category=category.category).first()
+            db.session.delete(record)
+            db.session.commit()
+        # Delete recipe record from the table Recipes
+        recipe_record = db.session.query(Recipes).filter_by(recipe_id=recipe_id).first()
+        db.session.delete(recipe_record)
+        db.session.commit()
 
-    # Query for recipe information
-    recipe = Recipes.query.filter_by(recipe_id=recipe_id).all()
-    ingredients = Ingredients.query.filter_by(recipe_id=recipe_id).all()
-    categories = Categories.query.filter_by(recipe_id=recipe_id).all()
-    
-    # Render template
-    return render_template("recipepage.html", current_year=current_year, recipe_id= recipe_id, recipe_name=recipe[0].name, recipe_image=recipe[0].image, description=recipe[0].description, prep_time=recipe[0].prep_time, cook_time=recipe[0].cooking_time, portions = recipe[0].portions, directions=recipe[0].directions, ingredients=ingredients, categories=categories)
+        # Redirect user to home page
+        flash("Recipe Deleted!")
+        return redirect('/myhome')
+    # User reached route via GET
+    else:
+        # Query for recipe information
+        recipe = Recipes.query.filter_by(recipe_id=recipe_id).all()
+        ingredients = Ingredients.query.filter_by(recipe_id=recipe_id).all()
+        categories = Categories.query.filter_by(recipe_id=recipe_id).all()
+
+        # Render template
+        return render_template("recipepage.html", current_year=current_year, recipe_id= recipe_id, recipe_name=recipe[0].name, recipe_image=recipe[0].image, description=recipe[0].description, prep_time=recipe[0].prep_time, cook_time=recipe[0].cooking_time, portions = recipe[0].portions, directions=recipe[0].directions, ingredients=ingredients, categories=categories)
 
 @app.route("/myrecipes/<int:recipe_id>/edit", methods=["GET", "POST"])
 @login_required
@@ -157,7 +179,8 @@ def editrecipe(recipe_id):
             
             file_ext = os.path.splitext(file.filename)[1]
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                abort(400) 
+                # abort(400) 
+                sys.exit('invalid file')
             filename = secure_filename(file.filename)
             newname = recipeName + str(user_id) + ".jpg" # change filename to recipe name+user id
             file.save(os.path.join(app.config['UPLOAD_PATH'], newname)) # to rename the file  save in folder static/uploads
@@ -312,7 +335,8 @@ def add():
             
             file_ext = os.path.splitext(file.filename)[1]
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                abort(400) 
+                #abort(400) 
+                sys.exit('invalid file')
             filename = secure_filename(file.filename)
             newname = recipeName + str(user_id) + ".jpg" # change filename to recipe name+user id
             file.save(os.path.join(app.config['UPLOAD_PATH'], newname)) # to rename the file  save in folder static/uploads
