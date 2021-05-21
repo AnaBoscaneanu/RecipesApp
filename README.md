@@ -14,7 +14,7 @@ After both signing in or signing up the user lands on his own home page, where h
 The form can be found by clicking on the menu option Add Recipe or by clicking on the Add New Recipe button from the user's homepage.
 All recipes are being saved and grouped by the categories that the user chose in the add form.
 The user can find all the recipes sorted by name on the directory called My Recipes. There he has the option to go to specific categories or make a search using ingredient names.
-When the user has more recipes saved, on the user's homepage he will see up to 6 most recently added recipes. On "My Recipes" he will find all saved recipes.
+When the user has more recipes saved, on the user's homepage he will see up to 6 most recently added recipes. On "My Recipes" he will find all saved recipes. Once a recipe is opened, the user has the options to edit or delete it.
 
 How the application is built:
 
